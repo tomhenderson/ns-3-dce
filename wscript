@@ -453,6 +453,10 @@ def build_dce_kernel_examples(module, bld):
                        target='bin/dce-ltp',
                        source=['example/dce-ltp.cc'])
 
+    module.add_example(needed = ['core', 'network', 'dce', 'point-to-point', 'internet', 'applications', 'traffic-control'],
+                       target='bin/dce-dctcp-17',
+                       source=['example/dce-dctcp-17.cc'])
+
     module.add_example(needed = ['core', 'network', 'dce', 'point-to-point', 'mobility'],
                        target='bin/dce-iperf-mptcp',
                        source=['example/dce-iperf-mptcp.cc'])
