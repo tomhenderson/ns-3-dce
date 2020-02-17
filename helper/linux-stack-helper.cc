@@ -186,7 +186,7 @@ LinuxStackHelper::SysctlSet (NodeContainer c, std::string path, std::string valu
                          "You may need to do it via DceManagerHelper::Install ()");
         }
       // i.e., TaskManager::Current() needs it.
-      Simulator::ScheduleWithContext (node->GetId (), Seconds (0.1),
+      Simulator::ScheduleWithContext (node->GetId (), MicroSeconds (1),
                                       MakeEvent (&LinuxSocketFdFactory::Set, sock,
                                                  path, value));
     }
