@@ -181,7 +181,7 @@ int main (int argc, char *argv[])
 {
   uint32_t stream = 1;
   std::string stack = "linux";
-  std::string transport_prot = "TcpNewReno";
+  std::string transport_prot = "TcpReno";
   std::string linux_prot = "reno";
   std::string queue_disc_type = "FifoQueueDisc";
   std::string sock_factory = "ns3::TcpSocketFactory";
@@ -441,7 +441,7 @@ int main (int argc, char *argv[])
       // Sets ECN mode to Classic ECN if useEcn is true
       if (useEcn)
         {
-          Config::SetDefault ("ns3::TcpSocketBase::EcnMode", StringValue ("ClassicEcn"));
+          Config::SetDefault ("ns3::TcpSocketBase::UseEcn", StringValue ("On"));
         }
     }
 
