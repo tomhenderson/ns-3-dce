@@ -102,9 +102,9 @@ def configure(conf):
     ns3waf.check_modules(conf, ['wifi', 'point-to-point', 'csma', 'mobility'], mandatory = False)
     ns3waf.check_modules(conf, ['point-to-point-layout'], mandatory = False)
     ns3waf.check_modules(conf, ['mpi', 'lte'], mandatory = False)
-    ns3waf.check_modules(conf, ['visualizer'], mandatory = False)
     ns3waf.check_modules(conf, ['applications'], mandatory = False)
     ns3waf.check_modules(conf, ['fd-net-device'], mandatory = False)
+    ns3waf.check_modules(conf, ['traffic-control', 'bridge', 'flow-monitor', 'internet-apps'], mandatory = False)
     conf.check(header_name='stdint.h', define_name='HAVE_STDINT_H', mandatory=False)
     conf.check(header_name='inttypes.h', define_name='HAVE_INTTYPES_H', mandatory=False)
     conf.check(header_name='sys/inttypes.h', define_name='HAVE_SYS_INT_TYPES_H', mandatory=False)
@@ -456,6 +456,10 @@ def build_dce_kernel_examples(module, bld):
     module.add_example(needed = ['core', 'network', 'dce', 'point-to-point', 'internet', 'applications', 'traffic-control'],
                        target='bin/dce-dctcp-17',
                        source=['example/dce-dctcp-17.cc'])
+
+    module.add_example(needed = ['core', 'network', 'dce', 'point-to-point', 'internet', 'applications', 'traffic-control'],
+                       target='bin/dctcp-single-flow',
+                       source=['example/dctcp-single-flow.cc'])
 
     module.add_example(needed = ['core', 'network', 'dce', 'point-to-point', 'mobility'],
                        target='bin/dce-iperf-mptcp',
