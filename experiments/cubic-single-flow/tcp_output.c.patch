@@ -1,0 +1,22 @@
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 412a920..12e42bc 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -41,6 +41,7 @@
+ #include <linux/compiler.h>
+ #include <linux/gfp.h>
+ #include <linux/module.h>
++#include <linux/timekeeping.h>
+ 
+ /* People can turn this off for buggy TCP's found in printers etc. */
+ int sysctl_tcp_retrans_collapse __read_mostly = 1;
+@@ -2140,6 +2141,9 @@ repair:
+ 		tcp_cwnd_validate(sk, is_cwnd_limited);
+ 		return false;
+ 	}
++        struct timeval tv;
++        do_gettimeofday(&tv);
++        printk(" %lu %06lu cwnd %u\n", tv.tv_sec, tv.tv_usec, tp->snd_cwnd);
+ 	return !tp->packets_out && tcp_send_head(sk);
+ }
+ 

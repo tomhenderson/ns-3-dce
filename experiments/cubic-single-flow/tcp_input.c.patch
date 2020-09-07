@@ -1,0 +1,82 @@
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 0003d40..b046959 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -75,6 +75,7 @@
+ #include <linux/ipsec.h>
+ #include <asm/unaligned.h>
+ #include <linux/errqueue.h>
++#include <linux/timekeeping.h>
+ 
+ int sysctl_tcp_timestamps __read_mostly = 1;
+ int sysctl_tcp_window_scaling __read_mostly = 1;
+@@ -761,6 +762,8 @@ static void tcp_update_pacing_rate(struct sock *sk)
+ {
+ 	const struct tcp_sock *tp = tcp_sk(sk);
+ 	u64 rate;
++	u64 origrate;
++        unsigned int ss = 0;
+ 
+ 	/* set sk_pacing_rate to 200 % of current rate (mss * cwnd / srtt) */
+ 	rate = (u64)tp->mss_cache * ((USEC_PER_SEC / 100) << 3);
+@@ -774,6 +777,10 @@ static void tcp_update_pacing_rate(struct sock *sk)
+ 	 *	 end of slow start and should slow down.
+ 	 */
+ 	if (tp->snd_cwnd < tp->snd_ssthresh / 2)
++                ss = 1;
++        else
++                ss = 0;
++	if (tp->snd_cwnd < tp->snd_ssthresh / 2)
+ 		rate *= sysctl_tcp_pacing_ss_ratio;
+ 	else
+ 		rate *= sysctl_tcp_pacing_ca_ratio;
+@@ -789,6 +796,9 @@ static void tcp_update_pacing_rate(struct sock *sk)
+ 	 */
+ 	ACCESS_ONCE(sk->sk_pacing_rate) = min_t(u64, rate,
+ 						sk->sk_max_pacing_rate);
++        struct timeval tv;
++        do_gettimeofday(&tv);
++        printk(" %lu %06lu tcp_update_pacing_rate %u %lu\n", tv.tv_sec, tv.tv_usec, ss, rate);
+ }
+ 
+ /* Calculate rto without backoff.  This is the second half of Van Jacobson's
+@@ -1882,6 +1892,9 @@ void tcp_enter_loss(struct sock *sk)
+ 	    !after(tp->high_seq, tp->snd_una) ||
+ 	    (icsk->icsk_ca_state == TCP_CA_Loss && !icsk->icsk_retransmits)) {
+ 		tp->prior_ssthresh = tcp_current_ssthresh(sk);
++        struct timeval tv;
++        do_gettimeofday(&tv);
++        printk(" %lu %06lu tcp_enter_loss ssthresh\n", tv.tv_sec, tv.tv_usec);
+ 		tp->snd_ssthresh = icsk->icsk_ca_ops->ssthresh(sk);
+ 		tcp_ca_event(sk, CA_EVENT_LOSS);
+ 		tcp_init_undo(tp);
+@@ -2519,6 +2532,9 @@ void tcp_enter_cwr(struct sock *sk)
+ 	tp->prior_ssthresh = 0;
+ 	if (inet_csk(sk)->icsk_ca_state < TCP_CA_CWR) {
+ 		tp->undo_marker = 0;
++        struct timeval tv;
++        do_gettimeofday(&tv);
++        printk(" %lu %06lu tcp_enter_cwr ssthresh\n", tv.tv_sec, tv.tv_usec);
+ 		tcp_init_cwnd_reduction(sk);
+ 		tcp_set_ca_state(sk, TCP_CA_CWR);
+ 	}
+@@ -2656,6 +2672,9 @@ static void tcp_enter_recovery(struct sock *sk, bool ece_ack)
+ 	if (!tcp_in_cwnd_reduction(sk)) {
+ 		if (!ece_ack)
+ 			tp->prior_ssthresh = tcp_current_ssthresh(sk);
++        struct timeval tv;
++        do_gettimeofday(&tv);
++        printk(" %lu %06lu tcp_enter_recovery ssthresh\n", tv.tv_sec, tv.tv_usec);
+ 		tcp_init_cwnd_reduction(sk);
+ 	}
+ 	tcp_set_ca_state(sk, TCP_CA_Recovery);
+@@ -3487,6 +3506,9 @@ static void tcp_process_tlp_ack(struct sock *sk, u32 ack, int flag)
+ 		/* ACK advances: there was a loss, so reduce cwnd. Reset
+ 		 * tlp_high_seq in tcp_init_cwnd_reduction()
+ 		 */
++        struct timeval tv;
++        do_gettimeofday(&tv);
++        printk(" %lu %06lu tcp_process_tlp_ack ssthresh\n", tv.tv_sec, tv.tv_usec);
+ 		tcp_init_cwnd_reduction(sk);
+ 		tcp_set_ca_state(sk, TCP_CA_CWR);
+ 		tcp_end_cwnd_reduction(sk);

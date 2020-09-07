@@ -116,6 +116,8 @@ def configure(conf):
     ns3waf.check_modules(conf, ['mpi', 'lte'], mandatory = False)
     ns3waf.check_modules(conf, ['visualizer'], mandatory = False)
     ns3waf.check_modules(conf, ['applications'], mandatory = False)
+    ns3waf.check_modules(conf, ['internet-apps'], mandatory = False)
+    ns3waf.check_modules(conf, ['traffic-control'], mandatory = False)
     ns3waf.check_modules(conf, ['fd-net-device'], mandatory = False)
     conf.check(header_name='stdint.h', define_name='HAVE_STDINT_H', mandatory=False)
     conf.check(header_name='inttypes.h', define_name='HAVE_INTTYPES_H', mandatory=False)
@@ -361,6 +363,10 @@ def build_dce_examples(module, bld):
                                     source = ['example/' + name + '.cc'],
                                     lib = lib))
         bld.install_files('${PREFIX}/bin_dce', 'bin_dce/' + name , chmod=Utils.O755 )        
+
+    module.add_example(needed = ['core', 'internet', 'dce', 'point-to-point', 'internet-apps', 'traffic-control', 'applications', 'network'], 
+                       target='bin/tcp-validation',
+                       source=['example/tcp-validation.cc'])
 
     module.add_example(needed = ['core', 'internet', 'dce'], 
                        target='bin/dce-tcp-simple',
