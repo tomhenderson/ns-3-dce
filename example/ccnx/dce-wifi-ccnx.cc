@@ -373,7 +373,7 @@ ManetCcnx::ConfigureTopology ()
 
   // Add a non-QoS upper mac, and disable rate control
   WifiMacHelper wifiMac;
-  wifi.SetStandard (WIFI_PHY_STANDARD_80211b);
+  wifi.SetStandard (WIFI_STANDARD_80211b);
   wifi.SetRemoteStationManager ("ns3::ConstantRateWifiManager",
 				"DataMode", StringValue (phyMode),
 				"ControlMode", StringValue (phyMode));

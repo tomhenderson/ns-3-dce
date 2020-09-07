@@ -166,7 +166,7 @@ int main (int argc, char *argv[])
       WifiMacHelper mac;
       phy.SetChannel (phyChannel.Create ());
       mac.SetType ("ns3::AdhocWifiMac");
-      wifi.SetStandard (WIFI_PHY_STANDARD_80211a);
+      wifi.SetStandard (WIFI_STANDARD_80211a);
       devices1 = wifi.Install (phy, mac, NodeContainer (nodes.Get (0), routers.Get (0)));
       // Assign ip addresses
       if1 = address1.Assign (devices1);

@@ -93,7 +93,7 @@ int main (int argc, char *argv[])
         WifiMacHelper mac;
         phy.SetChannel (phyChannel.Create ());
         mac.SetType ("ns3::AdhocWifiMac");
-        wifi.SetStandard (WIFI_PHY_STANDARD_80211a);
+        wifi.SetStandard (WIFI_STANDARD_80211a);
         devices = wifi.Install (phy, mac, nodes);
         phy.EnablePcapAll ("process-linux");
       }
