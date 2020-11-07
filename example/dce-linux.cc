@@ -88,7 +88,7 @@ int main (int argc, char *argv[])
         mobility.Install (nodes);
 
         WifiHelper wifi;
-        YansWifiPhyHelper phy = YansWifiPhyHelper::Default ();
+        YansWifiPhyHelper phy;
         YansWifiChannelHelper phyChannel = YansWifiChannelHelper::Default ();
         WifiMacHelper mac;
         phy.SetChannel (phyChannel.Create ());

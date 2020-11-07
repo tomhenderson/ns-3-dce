@@ -161,7 +161,6 @@ int main (int argc, char *argv[])
     {
       // Left link: H1 <-> WiFi-R
       WifiHelper wifi;
-      phy = YansWifiPhyHelper::Default ();
       YansWifiChannelHelper phyChannel = YansWifiChannelHelper::Default ();
       WifiMacHelper mac;
       phy.SetChannel (phyChannel.Create ());
