@@ -285,19 +285,19 @@ TraceSecondThroughput (std::ofstream* ofStream, Time throughputInterval)
 void
 ScheduleFirstTcpCwndTraceConnection (std::ofstream* ofStream)
 {
-  Config::ConnectWithoutContext ("/NodeList/1/$ns3::TcpL4Protocol/SocketList/0/CongestionWindow", MakeBoundCallback (&TraceFirstCwnd, ofStream));
+  Config::ConnectWithoutContextFailSafe ("/NodeList/1/$ns3::TcpL4Protocol/SocketList/0/CongestionWindow", MakeBoundCallback (&TraceFirstCwnd, ofStream));
 }
 
 void
 ScheduleFirstTcpRttTraceConnection (std::ofstream* ofStream)
 {
-  Config::ConnectWithoutContext ("/NodeList/1/$ns3::TcpL4Protocol/SocketList/0/RTT", MakeBoundCallback (&TraceFirstRtt, ofStream));
+  Config::ConnectWithoutContextFailSafe ("/NodeList/1/$ns3::TcpL4Protocol/SocketList/0/RTT", MakeBoundCallback (&TraceFirstRtt, ofStream));
 }
 
 void
 ScheduleFirstPacketSinkConnection (void)
 {
-  Config::ConnectWithoutContext ("/NodeList/9/ApplicationList/*/$ns3::PacketSink/Rx", MakeCallback (&TraceFirstRx));
+  Config::ConnectWithoutContextFailSafe ("/NodeList/9/ApplicationList/*/$ns3::PacketSink/Rx", MakeCallback (&TraceFirstRx));
 }
 
 void
@@ -819,10 +819,12 @@ main (int argc, char *argv[])
   Simulator::Schedule (Seconds (5) + MilliSeconds (100), &ScheduleFirstTcpCwndTraceConnection, &firstTcpCwndOfStream);
   Simulator::Schedule (Seconds (5) + MilliSeconds (100), &ScheduleFirstPacketSinkConnection);
   Simulator::Schedule (throughputSamplingInterval, &TraceFirstThroughput, &firstTcpThroughputOfStream, throughputSamplingInterval);
+#if 0
   // Setup scheduled traces; TCP traces must be hooked after socket creation
   Simulator::Schedule (Seconds (15) + MilliSeconds (100), &ScheduleSecondTcpRttTraceConnection, &secondTcpRttOfStream);
   Simulator::Schedule (Seconds (15) + MilliSeconds (100), &ScheduleSecondTcpCwndTraceConnection, &secondTcpCwndOfStream);
   Simulator::Schedule (Seconds (15) + MilliSeconds (100), &ScheduleSecondPacketSinkConnection);
+#endif
   Simulator::Schedule (throughputSamplingInterval, &TraceSecondThroughput, &secondTcpThroughputOfStream, throughputSamplingInterval);
   Simulator::Schedule (marksSamplingInterval, &TraceMarksFrequency, &m3MarksFrequencyOfStream, marksSamplingInterval);
   Simulator::Schedule (marksSamplingInterval, &TraceDropsFrequency, &m1DropsFrequencyOfStream, marksSamplingInterval);

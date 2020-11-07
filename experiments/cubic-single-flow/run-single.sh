@@ -46,11 +46,12 @@ link5rateRatio=1
 rtt=50ms
 controlScenario=1
 enablePcap=0
-firstTcpType=reno
+firstTcpType=cubic
 m3QueueType=codel
 queueUseEcn=1
-dceSender=1
-dceReceiver=1
+dceSender=0
+dceReceiver=0
+stopTime=20s
 RngRun=1
 ####################
 
@@ -136,6 +137,8 @@ cmd="./cubic-one-flow \
     --m3MarksFrequencyTraceFile=$m3MarksFrequencyTraceFile \
     --m3DropTraceFile=$m3DropTraceFile \
     --m3LengthTraceFile=$m3LengthTraceFile \
+    --ns3::TcpSocket::DelAckCount=1 \
+    --stopTime=$stopTime \
     --RngRun=${RngRun}"
 echo $cmd
 echo $cmd > log.txt
