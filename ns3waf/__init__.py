@@ -148,7 +148,7 @@ def build_ns3_libname(version, module, profile):
 def _check_dependencies(conf, required, mandatory):
     found = []
     libcore = build_ns3_libname("*", "core", conf.env['LIB_SUFFIX'])
-    ns3_dir_pkgconfig = conf.env['NS3_DIR'] + '/lib/pkgconfig'
+    ns3_dir_pkgconfig = str(conf.env['NS3_DIR']) + '/lib/pkgconfig'
 
     if not 'NS3_VERSION' in conf.env:
 
